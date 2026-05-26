@@ -8,6 +8,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('manager')->group(function () {
         Route::get('/',[ManagerController::class,'index'])->name('manager.index');
     });
+    Route::put('/profile',[AuthController::class,'update'])->name('auth.profile.update');
+    Route::get('/profile',[AuthController::class,'profile'])->name('auth.profile');
 });
 
 /* Authentication */

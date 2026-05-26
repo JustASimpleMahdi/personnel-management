@@ -28,6 +28,7 @@ class ManagerSeeder extends Seeder
             'password' => '12345678',
             'salary' => 20_000_000,
             'phone' => '09036249486',
+            'address'=>'یه جایی در شهسوار',
             'role_id' => $managerRole->id,
         ]);
     }

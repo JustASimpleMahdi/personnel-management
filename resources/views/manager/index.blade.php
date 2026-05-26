@@ -106,7 +106,9 @@
     <div class="header-container">
         <div class="header-top">
             <div style="font-size: 22px; color:#333; font-weight:600;  text-align:center; width:100%; margin-right: 40px;">پنل مدیریت</div>
-            <img src="{{ asset('images/Profile.png') }}" class="profile-icon" alt="پروفایل" >
+            <a href="{{ route('auth.profile') }}">
+                <img src="{{ asset('images/Profile.png') }}" class="profile-icon" alt="پروفایل" >
+            </a>
         </div>
         <div class="hr-line"></div>
     </div>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('national_code');
+            $table->string('national_code')->unique();
             $table->unsignedBigInteger('salary');
             $table->string('phone');
             $table->rememberToken();

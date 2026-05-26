@@ -23,6 +23,7 @@ use Illuminate\Notifications\Notifiable;
 'national_code',
 'salary',
 'phone',
+'address',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Model implements
