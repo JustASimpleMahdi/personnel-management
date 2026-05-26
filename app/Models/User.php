@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\RoleEnum;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -39,5 +40,12 @@ class User extends Model implements
         return [
             'password' => 'hashed',
         ];
+    }
+    public function redirectRoute(): string
+    {
+        return match ($this->role->key) {
+            RoleEnum::MANAGER => route('manager.index'),
+            default => route('welcome'),
+        };
     }
 }

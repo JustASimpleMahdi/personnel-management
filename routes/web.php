@@ -1,7 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ManagerController;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('manager')->group(function () {
+        Route::get('/',[ManagerController::class,'index'])->name('manager.index');
+    });
+});
 
 /* Authentication */
 Route::middleware('guest')->group(function () {
@@ -11,4 +18,4 @@ Route::middleware('guest')->group(function () {
 });
 Route::delete('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/', fn() => view('welcome'))->name('welcome');
+Route::get('/welcome', fn() => view('welcome'))->name('welcome');
