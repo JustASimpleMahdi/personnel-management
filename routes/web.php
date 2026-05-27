@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmployeeReportController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerUserController;
+use App\Http\Controllers\PurchasingManagerController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
+    Route::resource('reports', EmployeeReportController::class);
+    Route::prefix('purchasing-manager')->group(function () {
+        Route::get('/',[PurchasingManagerController::class,'index'])->name('purchasing-manager.index');
+    });
     Route::prefix('manager')->group(function () {
         Route::get('/users/{user}/delete', [ManagerUserController::class,'delete'])->name('manager.users.delete');
         Route::resource('users', ManagerUserController::class)->except(['show'])->names('manager.users');

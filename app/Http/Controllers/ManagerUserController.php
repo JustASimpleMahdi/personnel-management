@@ -38,7 +38,7 @@ class ManagerUserController extends Controller
             'salary' => 'required|integer'
         ]);
 
-        $validated['role_id'] = Role::where('key', RoleEnum::MANAGER)->first()->id;
+        $validated['role_id'] = Role::where('key', $validated['role'])->first()->id;
         unset($validated['role']);
 
         User::create($validated);
@@ -88,7 +88,7 @@ class ManagerUserController extends Controller
         ]);
 
 
-        $validated['role_id'] = Role::where('key', RoleEnum::MANAGER)->first()->id;
+        $validated['role_id'] = Role::where('key', $validated['role'])->first()->id;
         unset($validated['role']);
 
         if(empty($validated['password'])) {

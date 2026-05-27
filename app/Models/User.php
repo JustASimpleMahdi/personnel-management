@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 
@@ -35,6 +36,9 @@ class User extends Model implements
     use HasFactory, Notifiable;
     use Authorizable, Authenticatable;
 
+    public function reports(): HasMany{
+        return $this->hasMany(Report::class);
+    }
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -44,6 +48,7 @@ class User extends Model implements
     {
         return match ($this->role->key) {
             RoleEnum::MANAGER => route('manager.index'),
+            RoleEnum::PURCHASING_MANAGER => route('purchasing-manager.index'),
             default => route('welcome'),
         };
     }

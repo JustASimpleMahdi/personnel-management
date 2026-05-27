@@ -196,13 +196,15 @@ return [
     */
 
     'attributes' => [
-        'firstname'=>'نام',
-        'lastname'=>'نام خانوادگی',
+        'firstname' => 'نام',
+        'lastname' => 'نام خانوادگی',
         'phone' => 'شماره تماس',
         'national_code' => 'کد ملی',
         'address' => 'آدرس',
         'username' => 'نام کاربری',
         'password' => 'رمز عبور',
+        'title' => 'عنوان',
+        'description' => 'توضیحات'
     ],
 
 ];
