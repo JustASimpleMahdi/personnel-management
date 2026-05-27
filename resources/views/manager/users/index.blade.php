@@ -150,13 +150,13 @@
 <div class="screen">
     <div class="header">
 
-        <div class="back-button">
+        <a href="{{ route('manager.index') }}" class="back-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5"
                  stroke-linecap="round" stroke-linejoin="round">
 
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
-        </div>
+        </a>
         <h1 class="header-title">کاربران</h1>
         <div class="header-line"></div>
     </div>
