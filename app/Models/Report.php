@@ -6,7 +6,7 @@ use App\Casts\JalaliCast;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 #[Fillable('title','description')]
 class Report extends Model
@@ -14,8 +14,8 @@ class Report extends Model
     public function user(): BelongsTo{
         return $this->belongsTo(User::class);
     }
-    public function files():HasManyThrough{
-        return $this->hasManyThrough(File::class,ReportFile::class);
+    public function files(): BelongsToMany{
+        return $this->belongsToMany(File::class,ReportFile::class);
     }
 
     protected function casts(): array{

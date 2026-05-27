@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeReportController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerUserController;
 use App\Http\Controllers\PurchasingManagerController;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware('auth')->prefix('file')->group(function () {
+   Route::get('/report/{file}',[FileController::class,'reportFile'])->name('file.report');
+});
 
 Route::middleware('auth')->group(function () {
     Route::resource('reports', EmployeeReportController::class);
@@ -30,3 +35,5 @@ Route::middleware('guest')->group(function () {
 Route::delete('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::get('/welcome', fn() => view('welcome'))->name('welcome');
+
+Route::get('/', fn() => redirect()->route('welcome'));
