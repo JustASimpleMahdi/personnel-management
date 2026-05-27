@@ -79,15 +79,16 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 30px;
+            padding: 3px;
             overflow: hidden;
             background-color: #fff;
         }
 
         .avatar-container img {
-            width: calc(100% - 40px);
-            height: calc(100% - 40px);
+            width: 65%;
+            height: 100%;
             object-fit: cover;
-
+            border-radius: 50%;
         }
 
 
@@ -151,11 +152,14 @@
             margin-top: 10px;
         }
 
-        .error-message {
-            color: #ec0c04;
-            font-size: 13px;
-            text-align: right;
-            padding-right: 5px;
+        .update-success {
+            background-color: limegreen;
+            color: white;
+            padding: 10px 20px;
+            align-self: stretch;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -163,8 +167,9 @@
 
 <main class="screen">
 
-    <form action="{{ route('manager.users.store') }}" method="post" class="profile-card">
+    <form action="{{ route('manager.users.update',['user'=>$user]) }}" method="post" class="profile-card">
         @csrf
+        @method('PUT')
         <a href="{{ route('manager.users.index') }}" class="back-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5"
                  stroke-linecap="round" stroke-linejoin="round">
@@ -176,13 +181,18 @@
 
         <div class="avatar-container">
 
-            <img src="{{ asset('images/Add User.png') }}" alt="پروفایل">
+            <img src="{{ asset('images/Screenshot 2026-05-11 184314.png') }}" alt="پروفایل"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4ODgiIHN0cm9rZS13aWR0aD0iMS41Ij48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+'">
         </div>
 
 
+        @session('update-success')
+        <div class="update-success">اطلاعات با موفقیت بروزرسانی شد.</div>
+        @endsession
+
         <div class="input-group">
             <label>نام</label>
-            <input name="firstname" value="{{ old('firstname') }}" type="text" placeholder="نام">
+            <input name="firstname" value="{{ old('firstname',$user->firstname) }}" type="text" placeholder="نام">
             @error('firstname')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -190,7 +200,7 @@
 
         <div class="input-group">
             <label>نام خانوادگی</label>
-            <input name="lastname" value="{{ old('lastname') }}" type="text" placeholder="نام خانوادگی">
+            <input name="lastname" value="{{ old('lastname',$user->lastname) }}" type="text" placeholder="نام خانوادگی">
             @error('lastname')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -198,7 +208,7 @@
 
         <div class="input-group">
             <label>شماره همراه</label>
-            <input name="phone" value="{{ old('phone') }}" type="text" placeholder="شماره همراه">
+            <input name="phone" value="{{ old('phone',$user->phone) }}" type="text" placeholder="شماره همراه">
             @error('phone')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -206,7 +216,7 @@
 
         <div class="input-group">
             <label>کدملی</label>
-            <input name="national_code" value="{{ old('national_code') }}" type="text" placeholder="کدملی">
+            <input name="national_code" value="{{ old('national_code',$user->national_code) }}" type="text" placeholder="کدملی">
             @error('national_code')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -214,7 +224,7 @@
 
         <div class="input-group">
             <label>آدرس</label>
-            <textarea name="address" placeholder="آدرس">{{ old('address') }}</textarea>
+            <textarea name="address" placeholder="آدرس">{{ old('address',$user->address) }}</textarea>
             @error('address')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -224,7 +234,7 @@
             <label>نوع همکاری</label>
             <select name="role">
                 @foreach($roles as $role)
-                    <option @selected(old('role') == $role->key) value="{{ $role->key }}">{{ $role->name }}</option>
+                    <option @selected(old('role',$user->role->key) == $role->key) value="{{ $role->key }}">{{ $role->name }}</option>
                 @endforeach
             </select>
             <div class="dropdown-arrow">▼</div>
@@ -235,7 +245,7 @@
 
         <div class="input-group">
             <label>نام کاربری</label>
-            <input name="username" value="{{ old('username') }}" type="text" placeholder="نام کاربری">
+            <input name="username" value="{{ old('username',$user->username) }}" type="text" placeholder="نام کاربری">
             @error('username')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -251,7 +261,7 @@
 
         <div class="input-group">
             <label>حقوق پایه</label>
-            <input name="salary" value="{{ old('salary') }}" type="text" placeholder="حقوق پایه">
+            <input name="salary" value="{{ old('salary',$user->salary) }}" type="text" placeholder="حقوق پایه">
             @error('salary')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -260,12 +270,12 @@
         <div class="input-group">
             <label>شیفت فعلی</label>
             <select name="shift">
-                <option @selected(old('shift') == UserShiftEnum::MORNING) value="{{ UserShiftEnum::MORNING }}">صبح
+                <option @selected(old('shift',$user->shift) == UserShiftEnum::MORNING) value="{{ UserShiftEnum::MORNING }}">صبح
                 </option>
-                <option @selected(old('shift') == UserShiftEnum::AFTERNOON) value="{{ UserShiftEnum::AFTERNOON }}">بعد
+                <option @selected(old('shift',$user->shift) == UserShiftEnum::AFTERNOON) value="{{ UserShiftEnum::AFTERNOON }}">بعد
                     از ظهر
                 </option>
-                <option @selected(old('shift') == UserShiftEnum::TWO_SHIFTS)value="{{ UserShiftEnum::TWO_SHIFTS }}">
+                <option @selected(old('shift',$user->shift) == UserShiftEnum::TWO_SHIFTS) value="{{ UserShiftEnum::TWO_SHIFTS }}">
                     دوشیفت
                 </option>
             </select>
@@ -276,7 +286,7 @@
         </div>
 
 
-        <button class="edit-btn">ذخیره تغییرات</button>
+        <button class="edit-btn">ویرایش</button>
 
     </form>
 
@@ -284,3 +294,4 @@
 
 </body>
 </html>
+

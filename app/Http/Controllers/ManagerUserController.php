@@ -21,15 +21,6 @@ class ManagerUserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $roles = Role::whereNot('key', RoleEnum::MANAGER)->get();
-        return view('manager.users.create', compact('roles'));
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -56,27 +47,58 @@ class ManagerUserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for creating a new resource.
      */
-    public function show(string $id)
+    public function create()
     {
-        //
+        $roles = $this->getRoles();
+        return view('manager.users.create', compact('roles'));
+    }
+
+    protected function getRoles()
+    {
+        return Role::whereNot('key', RoleEnum::MANAGER)->get();
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = $this->getRoles();
+        return view('manager.users.edit', compact('user', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validated = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'national_code' => "required|numeric|unique:users,national_code,{$user->id}",
+            'phone' => "required|numeric|regex:/^09\d{9}$/|unique:users,phone,{$user->id}",
+            'address' => 'required',
+            'username' => "required|unique:users,username,{$user->id}",
+            'password' => 'nullable|min:4',
+            'role' => ['required', Rule::enum(RoleEnum::class)],
+            'shift' => ['required', Rule::enum(UserShiftEnum::class)],
+            'salary' => 'required|integer'
+        ]);
+
+
+        $validated['role_id'] = Role::where('key', RoleEnum::MANAGER)->first()->id;
+        unset($validated['role']);
+
+        if(empty($validated['password'])) {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('manager.users.edit', ['user' => $user])
+            ->with('update-success', true);
     }
 
     /**
