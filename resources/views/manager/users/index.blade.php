@@ -192,10 +192,8 @@
         @endforeach
     </div>
 
-    <div class="pagination">
-        <div style="transform: scale(0.8) scaleX(-1);"> > </div>
-        <span class="page-text">صفحه ۱ از ۱۰</span>
-    </div>
+    {{ $users->links() }}
+
 
 </div>
 
