@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::prefix('manager')->group(function () {
+        Route::get('/users/{user}/delete', [ManagerUserController::class,'delete'])->name('manager.users.delete');
         Route::resource('users', ManagerUserController::class)->except(['show'])->names('manager.users');
         Route::get('/',[ManagerController::class,'index'])->name('manager.index');
     });
