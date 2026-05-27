@@ -33,7 +33,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if(!Auth::attempt($validated)){
+        if(!Auth::attempt($validated,true)){
             return back()->withInput()->withErrors(['login'=>'نام کاربری یا رمز عبور اشتباه است.']);
         }
 

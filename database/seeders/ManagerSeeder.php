@@ -15,11 +15,6 @@ class ManagerSeeder extends Seeder
      */
     public function run(): void
     {
-        $managerRole = Role::create([
-            'key' => RoleEnum::MANAGER,
-            'name' => 'مدیر',
-        ]);
-
         User::create([
             'firstname' => 'مبینا',
             'lastname' => 'براهویی',
@@ -29,7 +24,7 @@ class ManagerSeeder extends Seeder
             'salary' => 20_000_000,
             'phone' => '09036249486',
             'address'=>'یه جایی در شهسوار',
-            'role_id' => $managerRole->id,
+            'role_id' => Role::where('key',RoleEnum::MANAGER)->first()->id,
         ]);
     }
 }

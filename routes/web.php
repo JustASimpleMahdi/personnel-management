@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\ManagerUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::prefix('manager')->group(function () {
+        Route::resource('users', ManagerUserController::class)->names('manager.users');
         Route::get('/',[ManagerController::class,'index'])->name('manager.index');
     });
     Route::put('/profile',[AuthController::class,'update'])->name('auth.profile.update');

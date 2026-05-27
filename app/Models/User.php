@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\RoleEnum;
-use Database\Factories\UserFactory;
+use App\UserShiftEnum;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,13 +17,15 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['firstname',
-'lastname',
-'username',
-'password',
-'national_code',
-'salary',
-'phone',
-'address',
+    'lastname',
+    'username',
+    'password',
+    'national_code',
+    'salary',
+    'phone',
+    'address',
+    'shift',
+    'role_id'
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Model implements
@@ -33,20 +35,29 @@ class User extends Model implements
     use HasFactory, Notifiable;
     use Authorizable, Authenticatable;
 
-    public function role(): BelongsTo{
+    public function role(): BelongsTo
+    {
         return $this->belongsTo(Role::class);
     }
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+
     public function redirectRoute(): string
     {
         return match ($this->role->key) {
             RoleEnum::MANAGER => route('manager.index'),
             default => route('welcome'),
         };
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'shift' => UserShiftEnum::class
+        ];
+    }
+
+    protected function fullname(): Attribute
+    {
+        return Attribute::get(fn() => $this->firstname . ' ' . $this->lastname);
     }
 }
