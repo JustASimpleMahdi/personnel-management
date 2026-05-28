@@ -17,7 +17,6 @@ class ManagerReportController extends Controller
     }
 
 
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -31,7 +30,19 @@ class ManagerReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-        //
+        $validated = $request->validate([
+            'seen' => 'boolean',
+            'response' => 'nullable',
+        ]);
+        if (isset($validated['seen']) && $validated['seen']) {
+            $report->manager_check()->updateOrCreate(
+                ['manager_id' => auth()->id()],
+                ['seen' => true, 'response' => $validated['response'], 'manager_id' => auth()->id()]
+            );
+        }else{
+            $report->manager_check()->delete();
+        }
+        return redirect()->route('manager.reports.index');
     }
 
     /**

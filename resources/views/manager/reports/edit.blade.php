@@ -138,13 +138,15 @@
         </div>
 
         <!-- بخش مشاهده شد و پاسخ (منتقل شده به پایین) -->
-        <form action="" class="action-form">
+        <form action="{{ route('manager.reports.update',['report' => $report]) }}" method="post" class="action-form">
+            @csrf
+            @method('PUT')
             <div class="action-section">
                 <div class="checkbox-row">
                     <span>مشاهده شد</span>
-                    <input type="checkbox" class="custom-checkbox">
+                    <input name="seen" @checked(old('seen', $report->is_seen)) type="checkbox" class="custom-checkbox" value="1">
                 </div>
-                <textarea name="" class="response-box" placeholder="درج پاسخ (اختیاری)"></textarea>
+                <textarea name="response" class="response-box" placeholder="درج پاسخ (اختیاری)">{{ $report->manager_check?->response }}</textarea>
             </div>
 
             <!-- دکمه ثبت -->
