@@ -34,14 +34,23 @@ class AuthController extends Controller
         ]);
 
         if(!Auth::attempt($validated,true)){
+
             return back()->withInput()->withErrors(['login'=>'نام کاربری یا رمز عبور اشتباه است.']);
         }
 
-        return redirect(auth()->user()->redirectRoute());
+        $request->session()->regenerate();
+
+        return redirect()->intended(auth()->user()->redirectRoute());
     }
-    public function logout()
+
+    public function logout(Request $request)
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
         return redirect()->route('welcome');
     }
 }

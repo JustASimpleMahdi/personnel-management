@@ -195,12 +195,12 @@
 
 <div class="screen">
     <div class="header">
-        <div class="back-button">
+        <a href="{{ route('manager.index') }}" class="back-button">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="3"
                  stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
-        </div>
+        </a>
         <h1 class="page-title">گزارشات</h1>
     </div>
 
