@@ -48,8 +48,16 @@ class ManagerReportController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function delete(Report $report)
+    {
+        return view('manager.reports.delete', compact('report'));
+    }
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Report $report)
     {
-        //
+        $report->delete();
+        return redirect()->route('manager.reports.index');
     }
 }

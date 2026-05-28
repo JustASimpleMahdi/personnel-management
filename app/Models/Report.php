@@ -10,23 +10,38 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable('title','description')]
+#[Fillable('title', 'description')]
 class Report extends Model
 {
-    public function user(): BelongsTo{
+    protected static function booted(): void
+    {
+        static::deleted(function ($report) {
+            $report->files->each(fn($file) => $file->delete());
+        });
+    }
+
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
-    public function files(): BelongsToMany{
-        return $this->belongsToMany(File::class,ReportFile::class);
+
+    public function files(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, ReportFile::class);
     }
-    public function manager_check(): HasOne{
+
+    public function manager_check(): HasOne
+    {
         return $this->hasOne(ManagerCheckReport::class);
     }
 
-    protected function isSeen(): Attribute{
-        return Attribute::get(fn()=> (bool) $this->manager_check?->seen);
+    protected function isSeen(): Attribute
+    {
+        return Attribute::get(fn() => (bool)$this->manager_check?->seen);
     }
-    protected function casts(): array{
+
+    protected function casts(): array
+    {
         return [
             'created_at' => JalaliCast::class,
             'updated_at' => JalaliCast::class,
