@@ -195,82 +195,131 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
             flex-direction: column;
             justify-content: flex-end;
-            z-index: 100;
-            display: none;
+            z-index: 10;
         }
 
         .modal-overlay.show {
             display: flex;
         }
-
         .filter-modal {
             background: #fff;
-            border-radius: 25px 25px 0 0;
+            width: 100%;
+            border-radius: 30px 30px 0 0;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-sizing: border-box;
         }
 
-        .filter-title {
-            font-size: 22px;
-            margin-bottom: 25px;
+        .modal-title {
+            font-size: 20px;
+            margin-bottom: 15px;
             color: #000;
         }
 
-        .filter-content {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .filter-label-main {
+        .filter-section {
             text-align: right;
-            font-size: 16px;
-            margin-bottom: 5px;
-            width: 100%;
+            margin-bottom: 12px;
         }
 
-        .date-container {
+        .section-label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .date-inputs {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 30px;
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
-        .date-box {
+        .date-group {
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 12px;
         }
 
-        .date-label {
-            font-size: 14px;
-            color: #000;
+        .date-box {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 4px 12px;
+            width: 75px;
+            text-align: center;
+            color: #ccc;
+            font-size: 12px;
         }
 
-        .date-slashes {
-            font-size: 16px;
-            color: #999;
-            letter-spacing: 5px;
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-start;
+        }
+
+        .tag {
+            border: 1px solid #ed82bd;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .tag input {
+            display: none;
+        }
+
+        .tag:has(input:checked) {
+            background-color: #ed82bd;
+            color: #fff;
+        }
+
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .custom-checkbox {
+            accent-color: #ed82bd;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ed82bd;
+            border-radius: 4px;
+            display: inline-block;
+
+        }
+
+        .checkbox-row span {
+            order: 1;
         }
 
         .apply-btn {
-            background-color: #ed82bd;
-            color: white;
+            background: #ed82bd;
+            color: #fff;
             border: none;
-            padding: 10px 60px;
-            border-radius: 25px;
+            border-radius: 20px;
+            width: 65%;
+            padding: 10px;
             font-size: 18px;
+            margin-top: 25px;
             cursor: pointer;
-            font-family: 'BYekanBold';
-            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(237, 130, 189, 0.4);
         }
     </style>
 </head>
@@ -327,28 +376,43 @@
 
     {{ $reports->links() }}
 
+
     <div id="filter-modal" class="modal-overlay">
         <form action="" class="filter-modal">
-            <div class="filter-title">فیلتر</div>
+            <h2 class="modal-title">فیلتر</h2>
 
-            <div class="filter-content">
-                <div class="filter-label-main">تاریخ</div>
-
-                <div class="date-container">
-
-                    <div class="date-box">
-                        <span class="date-label">از تاریخ: </span>
-                        <span class="date-slashes"><input name="from" type="text" value="{{ request('from') }}"></span>
-
+            <div class="filter-section">
+                <span class="section-label">:تاریخ</span>
+                <div class="date-inputs">
+                    <div class="date-group">
+                        <span>از تاریخ:</span>
+                        <input name="from" value="{{ request('from') }}" class="date-box" placeholder="/ /">
                     </div>
-
-
-                    <div class="date-box">
-                        <span class="date-label">تا تاریخ: </span>
-                        <span class="date-slashes"><input name="to" type="text" value="{{ request('to') }}"></span>
-
+                    <div class="date-group">
+                        <span>تا تاریخ:</span>
+                        <input name="to" value="{{ request('to') }}" class="date-box" placeholder="/ /">
                     </div>
                 </div>
+            </div>
+
+            <div class="filter-section">
+                <span class="section-label">:مسئول</span>
+                <div class="tags-container">
+                    @foreach($roles as $role)
+                        <label class="tag">
+                            <input name="role[]"
+                                   @checked(in_array($role->key->value,request('role') ?? [])) type="checkbox"
+                                   value="{{ $role->key->value }}">
+                            {{ $role->name }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+
+            <div class="checkbox-row">
+                <span>مشاهده شده</span>
+                <input name="seen" @checked(request('seen')) type="checkbox" class="custom-checkbox" value="1">
             </div>
 
             <button class="apply-btn">اعمال</button>
