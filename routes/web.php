@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/',[PurchasingManagerController::class,'index'])->name('purchasing-manager.index');
     });
     Route::prefix('manager')->group(function () {
-        Route::resource('reports', ManagerReportController::class)->names('manager.reports');
+        Route::resource('reports', ManagerReportController::class)->except(['show'])->names('manager.reports');
         Route::get('/users/{user}/delete', [ManagerUserController::class,'delete'])->name('manager.users.delete');
         Route::resource('users', ManagerUserController::class)->except(['show'])->names('manager.users');
         Route::get('/',[ManagerController::class,'index'])->name('manager.index');

@@ -17,20 +17,13 @@ class ManagerReportController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Report $report)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Report $report)
     {
-        //
+        return view('manager.reports.edit', compact('report'));
     }
 
     /**
