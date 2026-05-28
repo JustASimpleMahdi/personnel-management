@@ -13,9 +13,15 @@ class EmployeeReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reports = Report::where('user_id',auth()->id())->latest()->paginate();
+        $fromFilter = preg_match('/^\d{4}\/\d{2}\/\d{2}$/', $request->input('from')) ? $request->input('from') : null;
+        $toFilter = preg_match('/^\d{4}\/\d{2}\/\d{2}$/', $request->input('to')) ? $request->input('to') : null;
+
+        $reports = Report::where('user_id', auth()->id())
+            ->filterByDateRange($fromFilter, $toFilter)
+            ->latest('updated_at')
+            ->paginate();
         return view('reports.index',compact('reports'));
     }
 
