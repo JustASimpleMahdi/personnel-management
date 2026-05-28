@@ -87,24 +87,24 @@
             padding-right: 5px;
         }
 
-        /* تغییر ۱: صورتی شدن داخل مربع */
+
         .custom-checkbox {
             width: 18px; height: 18px;
             border: 2px solid #ed82bd;
             border-radius: 4px;
-            background-color: #ed82bd; /* رنگ صورتی داخل باکس */
+            background-color: #ed82bd;
             order: 1;
         }
         .checkbox-row span { order: 1; }
 
-        /* تغییر ۲: وسط‌چین کردن متن درج پاسخ */
+
         .response-box {
             width: 100%; border: 1.5px solid #ed82bd; border-radius: 15px;
             padding: 12px; min-height: 100px; color: #aaa; font-size: 14px;
             box-shadow: 0 6px 8px #ed82bd;
-            display: flex; /* استفاده از فلکس برای تراز کردن */
-            justify-content: center; /* تراز افقی وسط */
-            align-items: center; /* تراز عمودی وسط */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
         }
 
@@ -125,17 +125,19 @@
     <div class="main-container">
 
         <div class="report-content-box">
-            <div class="date-text">{{ $report->created_at->format('Y/m/d') }} :تاریخ</div>
-            <span class="label-title">عنوان:</span>
+            <div class="date-text">تاریخ: {{ $report->updated_at->format('Y/m/d') }}</div>
+            <span class="label-title">عنوان: {{$report->title}}</span>
             <span class="label-desc">شرح گزارش:</span>
+            <div>{{ $report->description }}</div>
         </div>
 
         <div class="attachment-wrapper">
-            <div class="attachment-btn">
-                <span>فایل پیوست</span>
+            @foreach($report->files as $file)
+                <a href="{{ route('file.report',['file'=>$file]) }}" class="attachment-btn">
+                    <span>{{ $file->filename }}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-            </div>
-            <div class="back-arrow"> > </div>
+                </a>
+            @endforeach
         </div>
 
         <div class="action-section">
@@ -144,11 +146,11 @@
                 <div class="custom-checkbox"></div>
             </div>
             <div class="response-box">
-                پاسخ مدیر درصورت وجود
+                {{ $report->manager_check?->response ?? 'بدون پاسخ' }}
             </div>
         </div>
 
-        <button class="submit-btn"> خروج</button>
+        <a href="{{ route('reports.index') }}" class="submit-btn"> خروج</a>
     </div>
 </div>
 

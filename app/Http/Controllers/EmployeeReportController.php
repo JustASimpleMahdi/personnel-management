@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use App\Models\Report;
 use App\Models\ReportFile;
 use App\Services\FileService;
@@ -57,8 +56,7 @@ class EmployeeReportController extends Controller
      */
     public function show(Report $report)
     {
-        //        TODO: abort if the report is not seen
-
+        if (!$report->is_seen) abort(404);
         return view('reports.show',compact('report'));
     }
 
@@ -67,7 +65,7 @@ class EmployeeReportController extends Controller
      */
     public function edit(Report $report)
     {
-        //        TODO: abort if the report is seen
+        if ($report->is_seen) abort(404);
         return view('reports.edit',compact('report'));
     }
 
@@ -76,7 +74,8 @@ class EmployeeReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-//        TODO: abort if the report is seen
+        if ($report->is_seen) abort(403);
+
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',

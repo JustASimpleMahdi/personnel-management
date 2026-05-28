@@ -12,7 +12,7 @@ class ManagerReportController extends Controller
      */
     public function index()
     {
-        $reports = Report::paginate();
+        $reports = Report::latest('updated_at')->paginate();
         return view('manager.reports.index', compact('reports'));
     }
 
