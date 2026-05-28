@@ -8,7 +8,7 @@
     <style>
         @font-face{
             font-family:'BYekan';
-            src:url('{{ asset('fonts/BYekan+ Bold.ttf') }}') format('truetype');
+            src:url('{{ asset('fonts/BYekan.ttf') }}') format('truetype');
             font-weight:700;
         }
 
@@ -125,7 +125,7 @@
 
     <div class="grid-container">
         <div class="card"><img src="{{ asset('images/notif.png') }}" alt="ایجاد"><span>ایجاد اعلانیه</span></div>
-        <div class="card"><img src="{{ asset('images/Document.png') }}" alt="گزارش"><span>گزارشات</span></div>
+        <a href="{{ route('manager.reports.index') }}" class="card"><img src="{{ asset('images/Document.png') }}" alt="گزارش"><span>گزارشات</span></a>
         <a href="{{ route('manager.users.index') }}" class="card"><img src="{{ asset('images/3 User.png') }}" alt="کاربران"><span>مدیریت کاربران</span></a>
         <div class="card"><img src="{{ asset('images/Chat.png') }}" alt="نظرات"><span>نظرات و پیشنهادات</span></div>
     </div>

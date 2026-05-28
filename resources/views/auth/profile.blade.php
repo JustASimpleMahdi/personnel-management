@@ -7,7 +7,7 @@
     <style>
         @font-face {
             font-family: 'BYekan';
-            src: url('{{ asset('fonts/BYekan+ Bold.ttf') }}') format('truetype');
+            src: url('{{ asset('fonts/BYekan.ttf') }}') format('truetype');
             font-weight: 700;
         }
 
