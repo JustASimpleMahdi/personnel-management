@@ -189,6 +189,89 @@
             cursor: pointer;
         }
 
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 100;
+            display: none;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .filter-modal {
+            background: #fff;
+            border-radius: 25px 25px 0 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        .filter-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .filter-label-main {
+            text-align: right;
+            font-size: 16px;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        .date-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .date-box {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .date-label {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .date-slashes {
+            font-size: 16px;
+            color: #999;
+            letter-spacing: 5px;
+        }
+
+        .apply-btn {
+            background-color: #ed82bd;
+            color: white;
+            border: none;
+            padding: 10px 60px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            font-family: 'BYekanBold';
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -206,7 +289,7 @@
 
     <div class="reports-bar">
         <span class="reports-label">گزارشات امروز:</span>
-        <div class="filter-icon">
+        <div onclick="openFilter()" class="filter-icon">
             <div class="filter-row">
                 <div class="f-dot"></div>
                 <div class="f-line"></div>
@@ -243,7 +326,48 @@
     </div>
 
     {{ $reports->links() }}
+
+    <div id="filter-modal" class="modal-overlay">
+        <form action="" class="filter-modal">
+            <div class="filter-title">فیلتر</div>
+
+            <div class="filter-content">
+                <div class="filter-label-main">تاریخ</div>
+
+                <div class="date-container">
+
+                    <div class="date-box">
+                        <span class="date-label">از تاریخ: </span>
+                        <span class="date-slashes"><input name="from" type="text" value="{{ request('from') }}"></span>
+
+                    </div>
+
+
+                    <div class="date-box">
+                        <span class="date-label">تا تاریخ: </span>
+                        <span class="date-slashes"><input name="to" type="text" value="{{ request('to') }}"></span>
+
+                    </div>
+                </div>
+            </div>
+
+            <button class="apply-btn">اعمال</button>
+        </form>
+    </div>
 </div>
+
+<script>
+    const modal = document.querySelector("#filter-modal")
+
+    function openFilter() {
+        modal.classList.add('show')
+    }
+
+    modal.addEventListener('click', (e) => {
+        if (e.target.closest('.filter-modal')) return
+        modal.classList.remove('show')
+    })
+</script>
 
 </body>
 </html>

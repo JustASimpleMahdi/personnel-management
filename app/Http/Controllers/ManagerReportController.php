@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\DateFilterTrait;
 use App\Models\Report;
 use Illuminate\Http\Request;
 
 class ManagerReportController extends Controller
 {
+    use DateFilterTrait;
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reports = Report::latest('updated_at')->paginate();
+        $query = $this->dateFilters($request, Report::getModel());
+        $reports = $query->latest('updated_at')->paginate();
         return view('manager.reports.index', compact('reports'));
     }
 
@@ -39,7 +43,7 @@ class ManagerReportController extends Controller
                 ['manager_id' => auth()->id()],
                 ['seen' => true, 'response' => $validated['response'], 'manager_id' => auth()->id()]
             );
-        }else{
+        } else {
             $report->manager_check()->delete();
         }
         return redirect()->route('manager.reports.index');
@@ -52,6 +56,7 @@ class ManagerReportController extends Controller
     {
         return view('manager.reports.delete', compact('report'));
     }
+
     /**
      * Remove the specified resource from storage.
      */
