@@ -407,6 +407,8 @@
         <img src="{{ asset('images/Wallet.png') }}" alt="حقوق"/>
         <span>حقوق و دستمزد</span>
     </div>
+
 </main>
+@stack('scripts')
 </body>
 </html>

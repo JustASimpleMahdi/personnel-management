@@ -327,6 +327,8 @@
         <a href="{{ route('suggestions.index') }}" class="card"><img src="{{ asset('images/Chat.png') }}"
                                                                      alt="نظرات"><span>نظرات و پیشنهادات</span></a>
     </div>
+
 </main>
+@stack('scripts')
 </body>
 </html>
