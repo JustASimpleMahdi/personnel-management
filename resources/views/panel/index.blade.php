@@ -126,7 +126,8 @@
     <div class="grid-container">
         <a href="{{ route('reports.index') }}" class="card"><img src="{{ asset('images/Show.png') }}" alt="ایجاد"><span>وضعیت گزارشات</span></a>
         <a href="{{ route('reports.create') }}" class="card"><img src="{{ asset('images/Document.png') }}" alt="گزارش"><span>گزارش جدید</span></a>
-        <div class="card"><img src="{{ asset('images/Time Square.png') }}" alt="کاربران"><span>ثبت ساعات کاری </span></div>
+        <a href="{{ route('work-hours.index') }}" class="card"><img src="{{ asset('images/Time Square.png') }}"
+                                                                    alt="کاربران"><span>ثبت ساعات کاری </span></a>
         <div class="card"><img src="{{ asset('images/Chat.png') }}" alt="نظرات"><span>نظرات و پیشنهادات</span></div>
     </div>
 </main>

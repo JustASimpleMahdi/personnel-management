@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\DayWorkHours;
 use App\UserShiftEnum;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -35,9 +36,12 @@ class User extends Model implements
     use HasFactory, Notifiable;
     use Authorizable, Authenticatable;
 
-    public function reports(): HasMany{
+
+    public function reports(): HasMany
+    {
         return $this->hasMany(Report::class);
     }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -46,6 +50,16 @@ class User extends Model implements
     public function redirectRoute(): string
     {
         return route($this->role->key->value . '.index');
+    }
+
+    protected function todayWorkHours(): Attribute
+    {
+        return Attribute::get(fn() => new DayWorkHours($this->workHours()->whereDate('date', '=', now())->get()));
+    }
+
+    public function workHours(): HasMany
+    {
+        return $this->hasMany(WorkHour::class);
     }
 
     protected function casts(): array

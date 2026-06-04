@@ -7,6 +7,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerReportController;
 use App\Http\Controllers\ManagerUserController;
+use App\Http\Controllers\WorkHourController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->prefix('file')->group(function () {
@@ -14,7 +15,11 @@ Route::middleware('auth')->prefix('file')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('reports', EmployeeReportController::class);
+    Route::post('/work-hours', [WorkHourController::class, 'store'])->name('work-hours.store');
+    Route::get('/work-hours', [WorkHourController::class, 'index'])->name('work-hours.index');
+
+    Route::resource('reports', EmployeeReportController::class)
+        ->middleware('role:accountant,cashier,sales-manager,purchasing-manager');
 
     Route::get('/accountant', [DefaultPanelController::class, 'index'])->middleware('role:accountant')->name('accountant.index');
     Route::get('/cashier', [DefaultPanelController::class, 'index'])->middleware('role:cashier')->name('cashier.index');

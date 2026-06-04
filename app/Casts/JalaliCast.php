@@ -28,7 +28,7 @@ class JalaliCast implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         if($value instanceof Jalalian){
-            return $value->toCarbon()->format('Y-m-d');
+            return $value->toCarbon();
         }
         return $value;
     }
