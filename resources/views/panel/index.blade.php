@@ -324,7 +324,8 @@
         <a href="{{ route('reports.create') }}" class="card"><img src="{{ asset('images/Document.png') }}" alt="گزارش"><span>گزارش جدید</span></a>
         <a href="{{ route('work-hours.index') }}" class="card"><img src="{{ asset('images/Time Square.png') }}"
                                                                     alt="کاربران"><span>ثبت ساعات کاری </span></a>
-        <div class="card"><img src="{{ asset('images/Chat.png') }}" alt="نظرات"><span>نظرات و پیشنهادات</span></div>
+        <a href="{{ route('suggestions.index') }}" class="card"><img src="{{ asset('images/Chat.png') }}"
+                                                                     alt="نظرات"><span>نظرات و پیشنهادات</span></a>
     </div>
 </main>
 </body>

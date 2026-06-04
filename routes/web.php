@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultPanelController;
 use App\Http\Controllers\EmployeeReportController;
+use App\Http\Controllers\EmployeeSuggestionController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagerAnnouncementController;
 use App\Http\Controllers\ManagerController;
@@ -16,6 +17,8 @@ Route::middleware('auth')->prefix('file')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::resource('suggestions', EmployeeSuggestionController::class)->only(['index', 'create', 'store'])
+        ->middleware('role:accountant,cashier,sales-manager,purchasing-manager');
 
     Route::post('/work-hours', [WorkHourController::class, 'store'])->name('work-hours.store');
     Route::get('/work-hours', [WorkHourController::class, 'index'])->name('work-hours.index');

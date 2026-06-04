@@ -36,7 +36,10 @@ class User extends Model implements
     use HasFactory, Notifiable;
     use Authorizable, Authenticatable;
 
-
+    public function suggestions(): HasMany
+    {
+        return $this->hasMany(Suggestion::class);
+    }
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
