@@ -60,6 +60,13 @@
             flex-direction: column;
             align-items: center;
             border: 2px solid var(--main-pink);
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 35px;
         }
 
         .title {
@@ -209,11 +216,18 @@
         tbody tr:last-child td {
             border-bottom: none;
         }
+
     </style>
 </head>
 <body>
 <main class="screen">
     <div class="profile-card">
+        <a href="{{ auth()->user()->redirectRoute() }}" class="back-btn">
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="3"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </a>
         <div class="title">ثبت ساعات کاری</div>
         <div class="date-box" id="currentDate">تاریخ امروز: {{ Jalalian::now()->format('Y/m/d') }}</div>
 

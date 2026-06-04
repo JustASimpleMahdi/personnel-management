@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\DayWorkHours;
+use App\Rules\TimeRule;
 use Illuminate\Http\Request;
 
 class WorkHourController extends Controller
@@ -19,10 +20,10 @@ class WorkHourController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'morning.start' => 'nullable|regex:/\d{2}:\d{2}/|required_with:morning.end',
-            'morning.end' => 'nullable|regex:/\d{2}:\d{2}/|required_with:morning.start',
-            'afternoon.start' => 'nullable|regex:/\d{2}:\d{2}/|required_with:afternoon.end',
-            'afternoon.end' => 'nullable|regex:/\d{2}:\d{2}/|required_with:afternoon.start',
+            'morning.start' => ['nullable', new TimeRule, 'required_with:morning.end', 'gte:08:00', 'lte:23:00'],
+            'morning.end' => ['nullable', new TimeRule, 'required_with:morning.start', 'gte:08:00', 'lte:23:00'],
+            'afternoon.start' => ['nullable', new TimeRule, 'required_with:afternoon.end', 'gte:08:00', 'lte:23:00'],
+            'afternoon.end' => ['nullable', new TimeRule, 'required_with:afternoon.start', 'gte:08:00', 'lte:23:00'],
         ]);
 
         if ($validated['morning']['start']) {
