@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\RoleEnum;
 use App\UserShiftEnum;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -46,11 +45,7 @@ class User extends Model implements
 
     public function redirectRoute(): string
     {
-        return match ($this->role->key) {
-            RoleEnum::MANAGER => route('manager.index'),
-            RoleEnum::PURCHASING_MANAGER => route('purchasing-manager.index'),
-            default => route('welcome'),
-        };
+        return route($this->role->key->value . '.index');
     }
 
     protected function casts(): array
