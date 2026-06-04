@@ -61,7 +61,7 @@ class ManagerAnnouncementController extends Controller
 
     public function delete(Announcement $announcement)
     {
-
+        return view('manager.announcements.delete', compact('announcement'));
     }
 
     /**
@@ -69,6 +69,7 @@ class ManagerAnnouncementController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
-        //
+        $announcement->delete();
+        return redirect()->route('manager.announcements.index');
     }
 }
