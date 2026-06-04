@@ -319,7 +319,8 @@
                                                                                alt="ایجاد"><span>مدیریت اعلانیه ها</span></a>
         <a href="{{ route('manager.reports.index') }}" class="card"><img src="{{ asset('images/Document.png') }}" alt="گزارش"><span>گزارشات</span></a>
         <a href="{{ route('manager.users.index') }}" class="card"><img src="{{ asset('images/3 User.png') }}" alt="کاربران"><span>مدیریت کاربران</span></a>
-        <div class="card"><img src="{{ asset('images/Chat.png') }}" alt="نظرات"><span>نظرات و پیشنهادات</span></div>
+        <a href="{{ route('manager.suggestions.index') }}" class="card"><img src="{{ asset('images/Chat.png') }}"
+                                                                             alt="نظرات"><span>نظرات و پیشنهادات</span></a>
     </div>
 
 

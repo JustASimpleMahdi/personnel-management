@@ -8,6 +8,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagerAnnouncementController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerReportController;
+use App\Http\Controllers\ManagerSuggestionController;
 use App\Http\Controllers\ManagerUserController;
 use App\Http\Controllers\WorkHourController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchasing-manager', [DefaultPanelController::class, 'index'])->middleware('role:purchasing-manager')->name('purchasing-manager.index');
 
     Route::prefix('manager')->middleware(['role:manager'])->group(function () {
+        Route::resource('suggestions', ManagerSuggestionController::class)->only(['index', 'show'])->names('manager.suggestions');
+
         Route::get('/announcements/{announcement}/delete', [ManagerAnnouncementController::class, 'delete'])->name('manager.announcements.delete');
         Route::resource('announcements', ManagerAnnouncementController::class)->except(['show'])->names('manager.announcements');
 
