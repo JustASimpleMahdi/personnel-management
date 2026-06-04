@@ -17,7 +17,7 @@ Route::middleware('auth')->prefix('file')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('suggestions', EmployeeSuggestionController::class)->only(['index', 'create', 'store'])
+    Route::resource('suggestions', EmployeeSuggestionController::class)->only(['index', 'create', 'store', 'show'])
         ->middleware('role:accountant,cashier,sales-manager,purchasing-manager');
 
     Route::post('/work-hours', [WorkHourController::class, 'store'])->name('work-hours.store');

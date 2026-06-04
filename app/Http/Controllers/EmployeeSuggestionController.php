@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Suggestion;
 use Illuminate\Http\Request;
 
 class EmployeeSuggestionController extends Controller
@@ -35,5 +36,13 @@ class EmployeeSuggestionController extends Controller
     public function create()
     {
         return view('panel.suggestions.create');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function show(Suggestion $suggestion)
+    {
+        return view('panel.suggestions.show', compact('suggestion'));
     }
 }
