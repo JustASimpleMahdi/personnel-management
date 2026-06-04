@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultPanelController;
 use App\Http\Controllers\EmployeeReportController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ManagerAnnouncementController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerReportController;
 use App\Http\Controllers\ManagerUserController;
@@ -15,6 +16,7 @@ Route::middleware('auth')->prefix('file')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
     Route::post('/work-hours', [WorkHourController::class, 'store'])->name('work-hours.store');
     Route::get('/work-hours', [WorkHourController::class, 'index'])->name('work-hours.index');
 
@@ -27,10 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchasing-manager', [DefaultPanelController::class, 'index'])->middleware('role:purchasing-manager')->name('purchasing-manager.index');
 
     Route::prefix('manager')->middleware(['role:manager'])->group(function () {
+        Route::get('/announcements/{announcement}/delete', [ManagerAnnouncementController::class, 'delete'])->name('manager.announcements.delete');
+        Route::resource('announcements', ManagerAnnouncementController::class)->names('manager.announcements');
+
         Route::get('/reports/{report}/delete', [ManagerReportController::class, 'delete'])->name('manager.reports.delete');
         Route::resource('reports', ManagerReportController::class)->except(['show'])->names('manager.reports');
+
         Route::get('/users/{user}/delete', [ManagerUserController::class, 'delete'])->name('manager.users.delete');
         Route::resource('users', ManagerUserController::class)->except(['show'])->names('manager.users');
+
         Route::get('/', [ManagerController::class, 'index'])->name('manager.index');
     });
     Route::put('/profile', [AuthController::class, 'update'])->name('auth.profile.update');
