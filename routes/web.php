@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('manager')->middleware(['role:manager'])->group(function () {
         Route::get('/announcements/{announcement}/delete', [ManagerAnnouncementController::class, 'delete'])->name('manager.announcements.delete');
-        Route::resource('announcements', ManagerAnnouncementController::class)->names('manager.announcements');
+        Route::resource('announcements', ManagerAnnouncementController::class)->except(['show'])->names('manager.announcements');
 
         Route::get('/reports/{report}/delete', [ManagerReportController::class, 'delete'])->name('manager.reports.delete');
         Route::resource('reports', ManagerReportController::class)->except(['show'])->names('manager.reports');

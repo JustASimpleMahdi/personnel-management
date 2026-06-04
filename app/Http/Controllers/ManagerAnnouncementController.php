@@ -38,19 +38,12 @@ class ManagerAnnouncementController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Announcement $announcement)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Announcement $announcement)
     {
-        //
+        return view('manager.announcements.edit', compact('announcement'));
+
     }
 
     /**
@@ -58,7 +51,12 @@ class ManagerAnnouncementController extends Controller
      */
     public function update(Request $request, Announcement $announcement)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required',
+            'text' => 'required',
+        ]);
+        $announcement->update($validated);
+        return redirect()->route('manager.announcements.index');
     }
 
     public function delete(Announcement $announcement)
