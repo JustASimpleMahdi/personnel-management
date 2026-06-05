@@ -403,10 +403,10 @@
         <a href="{{ route('suggestions.index') }}" class="card"><img src="{{ asset('images/Chat.png') }}"
                                                                      alt="نظرات"><span>نظرات و پیشنهادات</span></a>
     </div>
-    <div class="wide-card">
+    <a href="{{ route('accountant.salaries.index') }}" class="wide-card">
         <img src="{{ asset('images/Wallet.png') }}" alt="حقوق"/>
         <span>حقوق و دستمزد</span>
-    </div>
+    </a>
 
 </main>
 @stack('scripts')

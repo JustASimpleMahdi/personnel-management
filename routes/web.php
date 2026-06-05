@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountantPanelController;
+use App\Http\Controllers\AccountantSalaryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DefaultPanelController;
 use App\Http\Controllers\EmployeeReportController;
@@ -28,7 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('reports', EmployeeReportController::class)
         ->middleware('role:accountant,cashier,sales-manager,purchasing-manager');
 
-    Route::get('/accountant', [AccountantPanelController::class, 'index'])->middleware('role:accountant')->name('accountant.index');
+    Route::prefix('accountant')->middleware(['role:accountant'])->group(function () {
+        Route::get('/salaries', [AccountantSalaryController::class, 'index'])->name('accountant.salaries.index');
+        Route::get('/', [AccountantPanelController::class, 'index'])->name('accountant.index');
+    });
+
     Route::get('/cashier', [DefaultPanelController::class, 'index'])->middleware('role:cashier')->name('cashier.index');
     Route::get('/sales-manager', [DefaultPanelController::class, 'index'])->middleware('role:sales-manager')->name('sales-manager.index');
     Route::get('/purchasing-manager', [DefaultPanelController::class, 'index'])->middleware('role:purchasing-manager')->name('purchasing-manager.index');

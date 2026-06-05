@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Morilog\Jalali\Jalalian;
 
 #[Fillable(['firstname',
     'lastname',
@@ -36,10 +37,39 @@ class User extends Model implements
     use HasFactory, Notifiable;
     use Authorizable, Authenticatable;
 
+    protected static function booted(): void
+    {
+        static::updated(function (User $user) {
+            if (!($user->wasChanged('salary') || $user->wasChanged('shift'))) return;
+
+            $currentMonthSalary = $user->currentMonthSalary()->firstOrNew();
+            $currentMonthSalary->save();
+        });
+    }
+
+    public function currentMonthSalary()
+    {
+        $now = Jalalian::now();
+        return $this->hasOne(Salary::class)
+            ->where('year', $now->getYear())->where('month', $now->getMonth())
+            ->ofMany();
+    }
+
+    public function monthSalary(int $year, int $month): Salary|null
+    {
+        return $this->salaries()->where('year', $year)->where('month', $month)->first();
+    }
+
+    public function salaries(): HasMany
+    {
+        return $this->hasMany(Salary::class);
+    }
+
     public function suggestions(): HasMany
     {
         return $this->hasMany(Suggestion::class);
     }
+
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
