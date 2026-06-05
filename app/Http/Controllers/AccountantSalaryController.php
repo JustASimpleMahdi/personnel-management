@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salary;
 use App\Models\User;
 use App\RoleEnum;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Morilog\Jalali\Jalalian;
 
 class AccountantSalaryController extends Controller
 {
     public function index(Request $request)
     {
-        $year = (int)$request->year ?? Jalalian::now()->getYear();
-        $month = (int)$request->month ?? Jalalian::now()->getMonth();
+        try {
+            $request->validate([
+                'year' => 'required|integer|min:1380|max:3000',
+                'month' => 'required|integer|min:1|max:12',
+            ]);
+            $year = $request->year;
+            $month = $request->month;
+        } catch (ValidationException) {
+            $year = Jalalian::now()->getYear();
+            $month = Jalalian::now()->getMonth();
+        }
 
         $date = new Jalalian($year, $month, 1);
 
@@ -35,5 +46,11 @@ class AccountantSalaryController extends Controller
         }
 
         return view('accountant.salaries.index', compact('employees', 'date', 'isCurrentMonth'));
+    }
+
+    public function show(Salary $salary)
+    {
+        $salary->load('user');
+        return view('accountant.salaries.show', compact('salary'));
     }
 }

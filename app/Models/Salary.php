@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Classes\DayWorkHours;
+use App\Classes\DayWorkHoursWithPenalty;
 use App\SalaryShiftEnum;
 use App\UserShiftEnum;
 use Carbon\Carbon;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Morilog\Jalali\Jalalian;
 
 #[Fillable('year', 'month', 'shift', 'base_salary')]
@@ -32,10 +34,6 @@ class Salary extends Model
         });
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     protected function total(): Attribute
     {
@@ -44,24 +42,46 @@ class Salary extends Model
         });
     }
 
-
     protected function totalPenalty(): Attribute
     {
         return Attribute::get(function () {
-            $workedHours = $this->worked_hours->groupBy('date');
-
             return round(
-                collect(range(0, $this->first_day_of_month->getMonthDays() - 1))
-                    ->map(fn($index) => $this->first_day_of_month->addDays($index))
-                    ->map(function (Jalalian $date) use ($workedHours) {
-                        if ($workedHours->has($date->toString())) {
-                            return new DayWorkHours($workedHours->get($date->toString()));
-                        }
-                        return new DayWorkHours(collect(), $date);
-                    })
-                    ->map(fn($dayWorkHours) => $this->calculateDayWorkHoursPenalty($dayWorkHours))
-                    ->sum()
+                $this->every_day_of_month_worked_hours->sum('penalty')
             );
+        });
+    }
+
+    protected function workedDays(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->workHours()
+                ->whereBetween('date', [$this->first_day_of_month->toCarbon(), $this->end_day_of_month->toCarbon()])
+                ->get()
+                ->groupBy('date')
+                ->map(function ($workHours): DayWorkHours {
+                    return new DayWorkHoursWithPenalty(
+                        $workHours,
+                        $this->calculateDayWorkHoursPenalty(new DayWorkHours($workHours))
+                    );
+                })->values();
+        });
+
+    }
+
+    public function everyDayOfMonthWorkedHours(): Attribute
+    {
+        return Attribute::get(function () {
+            return collect(range(0, $this->first_day_of_month->getMonthDays() - 1))
+                ->map(fn($index) => $this->first_day_of_month->addDays($index))
+                ->map(function (Jalalian $date) {
+                    $workedDay = $this->worked_days->first(fn(DayWorkHours $day) => $date->equalsTo($day->date));
+                    if ($workedDay) return $workedDay;
+                    return new DayWorkHoursWithPenalty(
+                        collect(),
+                        $this->calculateDayWorkHoursPenalty(new DayWorkHours(collect(), date: $date)),
+                        date: $date
+                    );
+                });
         });
     }
 
@@ -80,14 +100,6 @@ class Salary extends Model
         return ($workedMinutes - $baseWorkMinutes) * $salaryPerMinute;
     }
 
-    protected function workedHours(): Attribute
-    {
-        return Attribute::get(fn() => $this->hasManyThrough(WorkHour::class, User::class, 'id', 'user_id', 'user_id', 'id')
-            ->whereBetween('date', [$this->first_day_of_month->toCarbon(), $this->end_day_of_month->toCarbon()])->get()
-        );
-
-    }
-
     protected function firstDayOfMonth(): Attribute
     {
         return Attribute::get(fn() => new Jalalian($this->year, $this->month, 1));
@@ -96,6 +108,23 @@ class Salary extends Model
     protected function endDayOfMonth(): Attribute
     {
         return Attribute::get(fn() => $this->first_day_of_month->getEndDayOfMonth());
+    }
+
+    public function workHours(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            WorkHour::class,
+            User::class,
+            'id',
+            'user_id',
+            'user_id',
+            'id'
+        );
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected function casts(): array

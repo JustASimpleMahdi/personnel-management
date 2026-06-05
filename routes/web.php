@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:accountant,cashier,sales-manager,purchasing-manager');
 
     Route::prefix('accountant')->middleware(['role:accountant'])->group(function () {
+        Route::get('/salaries/{salary}', [AccountantSalaryController::class, 'show'])->name('accountant.salaries.show');
         Route::get('/salaries', [AccountantSalaryController::class, 'index'])->name('accountant.salaries.index');
         Route::get('/', [AccountantPanelController::class, 'index'])->name('accountant.index');
     });

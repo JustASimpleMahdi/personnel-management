@@ -182,10 +182,12 @@
                 @php($salary = $isCurrentMonth ? $employee->currentMonthSalary : $employee->month_salary)
                 @if($salary)
                     <tr>
-                        <td>{{ $employee->fullname }}</td>
-                        <td>{{ toman($employee->currentMonthSalary->base_salary) }}</td>
-                        <td>{{ toman($employee->currentMonthSalary->total_penalty) }}</td>
-                        <td>{{ toman($employee->currentMonthSalary->total) }}</td>
+                        <td>
+                            <a href="{{ route('accountant.salaries.show',['salary' => $salary]) }}">{{ $employee->fullname }}</a>
+                        </td>
+                        <td>{{ toman($salary->base_salary) }}</td>
+                        <td>{{ toman($salary->total_penalty) }}</td>
+                        <td>{{ toman($salary->total) }}</td>
                     </tr>
                 @endif
             @endforeach
