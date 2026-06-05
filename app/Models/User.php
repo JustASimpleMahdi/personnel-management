@@ -51,8 +51,7 @@ class User extends Model implements
     {
         $now = Jalalian::now();
         return $this->hasOne(Salary::class)
-            ->where('year', $now->getYear())->where('month', $now->getMonth())
-            ->ofMany();
+            ->where('year', $now->getYear())->where('month', $now->getMonth());
     }
 
     public function monthSalary(int $year, int $month): Salary|null

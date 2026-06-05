@@ -36,7 +36,7 @@ class AccountantSalaryController extends Controller
 
         if ($isCurrentMonth) {
             $employees->each(function ($employee) {
-                $employee->currentMonthSalary()->firstOrCreate();
+                $employee->currentMonthSalary()->first();
             });
             $employees->load('currentMonthSalary');
         } else {
