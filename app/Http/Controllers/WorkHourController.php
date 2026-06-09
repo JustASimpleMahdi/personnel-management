@@ -20,10 +20,10 @@ class WorkHourController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'morning.start' => ['nullable', new TimeRule, 'required_with:morning.end', 'gte:07:00', 'lte:23:00'],
-            'morning.end' => ['nullable', new TimeRule, 'required_with:morning.start', 'gte:07:00', 'lte:23:00'],
-            'afternoon.start' => ['nullable', new TimeRule, 'required_with:afternoon.end', 'gte:07:00', 'lte:23:00'],
-            'afternoon.end' => ['nullable', new TimeRule, 'required_with:afternoon.start', 'gte:07:00', 'lte:23:00'],
+            'morning.start' => ['nullable', new TimeRule('07:00', '23:00'), 'required_with:morning.end'],
+            'morning.end' => ['nullable', new TimeRule('07:00', '23:00'), 'required_with:morning.start'],
+            'afternoon.start' => ['nullable', new TimeRule('07:00', '23:00'), 'required_with:afternoon.end'],
+            'afternoon.end' => ['nullable', new TimeRule('07:00', '23:00'), 'required_with:afternoon.start'],
         ]);
 
         if ($validated['morning']['start']) {

@@ -86,7 +86,7 @@ class User extends Model implements
 
     protected function todayWorkHours(): Attribute
     {
-        return Attribute::get(fn() => new DayWorkHours($this->workHours()->whereDate('date', '=', now())->get()));
+        return Attribute::get(fn() => new DayWorkHours($this->workHours()->whereDate('date', '=', now())->get(), Jalalian::now()));
     }
 
     public function workHours(): HasMany
