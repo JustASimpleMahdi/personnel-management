@@ -29,7 +29,7 @@ class AccountantSalaryController extends Controller
 
         $employees = User::has('role', callback: function ($builder) {
             $builder->whereNot('key', RoleEnum::MANAGER);
-        })->get();
+        })->orderBy('lastname')->orderBy('firstname')->get();
 
         $today = Jalalian::now();
         $isCurrentMonth = $year === $today->getYear() && $month === $today->getMonth();

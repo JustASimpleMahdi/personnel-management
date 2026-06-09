@@ -174,6 +174,7 @@
 
 
         @foreach($salary->every_day_of_month_worked_hours as $day)
+            @break($day->date->isFuture())
             <div class="entry">
                 <div class="date">{{ $day->date->format('Y/m/d') }}</div>
                 @if($day->penalty >= 0)
